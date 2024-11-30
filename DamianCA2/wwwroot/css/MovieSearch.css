@@ -1,4 +1,4 @@
-html, body {
+﻿html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     color: #333; /* Optional: Change the default text color if needed */
     height: 100%;
@@ -7,17 +7,18 @@ html, body {
     background-color: ghostwhite;
 }
 
-footer {
-    margin-top: 320px;
-    color: black;
-    font-size: 1.2em;
-}
-
 .container {
     text-align: center;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+}
+
+
+footer {
+    margin-top: 50px;
+    color: black;
+    font-size: 0.8em;
 }
 
 .logo {
@@ -46,17 +47,3 @@ li {
     background-color: #f0f0f0;
     border-radius: 5px;
 }
-
-.right-images {
-    flex: 0 0 50px; /* Adjust width based on your image size or preference */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1px;
-    box-sizing: border-box;
-}
-
-    .right-images img {
-        width: 10%; /* Make images expand to fill the sidebar */
-        margin-bottom: 10px;
-    }

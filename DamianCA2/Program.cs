@@ -2,6 +2,7 @@ using DamianCA2.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
+
 namespace DamianCA2
 {
     public class Program
@@ -23,6 +24,7 @@ namespace DamianCA2
             // Register the MusicService for dependency injection
             builder.Services.AddScoped<MovieService>();
             builder.Services.AddScoped<NewsService>();
+         
             // Build the WebAssembly host
             var host = builder.Build();
 

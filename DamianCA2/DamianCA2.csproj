@@ -7,10 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\images\Gladiator.jpeg" />
     <Content Remove="wwwroot\sample-data\db.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\images\Gladiator.jpeg" />
+    <None Include="wwwroot\images\moana.jpg" />
+    <None Include="wwwroot\images\Smile_2.jpg" />
+    <None Include="wwwroot\images\Venom.jpg" />
     <None Include="wwwroot\sample-data\db.png" />
   </ItemGroup>
 
