@@ -21,5 +21,33 @@ namespace DamianCA2.Services
                 throw new Exception("No API key added, please try again");
             }
         }
+        public async Task<string> FetchMusicData(string query)
+        {
+            try
+            {
+                var url = $"https://api.themoviedb.org/3/search/movie?api_key={apiKey}&query={Uri.EscapeDataString(query)}";
+
+                Console.WriteLine($"Searching: {url}");
+                var response = await httpClient.GetAsync(url);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine($"Api error: {response.StatusCode}");
+                    var errorDetails = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Error details: {errorDetails}");
+                    return null;
+                }
+
+                // Read and return the JSON response
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"API Response: {jsonResponse}");
+                return jsonResponse;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception occurred in MovieService: {ex.Message}");
+                return null;
+            }
+        }
     }
 }
