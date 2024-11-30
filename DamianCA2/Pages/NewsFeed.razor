@@ -1,1 +1,44 @@
-﻿
+﻿@page "/news"
+@inject NewsService NewsService
+
+<h1>Latest Movie News</h1>
+
+@code {
+    private List<Article> articles = new();
+    private bool loading = false;
+
+    // Fetch news articles when the component is initialized
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+
+        Console.WriteLine("Fetching news articles...");
+        var result = await NewsService.FetchMovieNewsAsync();
+
+        if (!string.IsNullOrEmpty(result))
+        {
+            var newsResponse = System.Text.Json.JsonSerializer.Deserialize<NewsResponse>(result);
+            articles = newsResponse?.articles ?? new List<Article>();
+        }
+
+        loading = false;
+    }
+
+    // Models for NewsAPI response
+    public class Article
+    {
+        public string title { get; set; }
+        public string url { get; set; }
+        public Source source { get; set; }
+    }
+
+    public class Source
+    {
+        public string name { get; set; }
+    }
+
+    public class NewsResponse
+    {
+        public List<Article> articles { get; set; }
+    }
+}
