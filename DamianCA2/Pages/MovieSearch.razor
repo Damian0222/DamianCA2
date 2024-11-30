@@ -5,6 +5,19 @@
 <h1>Movie Search</h1>
 <input @bind="searchQuery" placeholder="Please enter a movie title below" />
 <button @onclick="SearchMovie">Search</button>
+@if (isSearching)
+{
+    <p>Loading</p>
+}
+else if (chosenMovie != null)
+{
+    <h2>Description of "@chosenMovie.Title"</h2>
+    <p>@chosenMovie.Overview</p>
+}
+else if (!string.IsNullOrWhiteSpace(searchQuery) && searchResults != null && !searchResults.Any())
+{
+    <p>No movies found, please select a diferent movie.</p>
+}
 @code {
     private string searchQuery;
     private Movie chosenMovie;
