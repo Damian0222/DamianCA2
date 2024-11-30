@@ -3,6 +3,28 @@
 
 <h1>Latest Movie News</h1>
 
+@if (loading)
+{
+    <p>Loading...</p>
+}
+else if (articles != null && articles.Count > 0)
+{
+    <ul>
+        @foreach (var article in articles)
+        {
+            <li>
+                <strong>@article.title</strong> - @article.source.name
+                <br />
+                <a href="@article.url" target="_blank">Read More</a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No news articles available</p>
+}
+
 @code {
     private List<Article> articles = new();
     private bool loading = false;
