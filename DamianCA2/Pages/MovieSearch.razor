@@ -1,0 +1,37 @@
+﻿@using DamianCA2.Model
+@page "/movie-search"
+@inject HttpClient Http
+
+<h1>Movie Search</h1>
+<input @bind="searchQuery" placeholder="Please enter a movie title below" />
+<button @onclick="SearchMovie">Search</button>
+@code {
+    private string searchQuery;
+    private Movie chosenMovie;
+    private List<Movie> searchResults;
+    private bool isSearching;
+
+    private async Task SearchMovie()
+    {
+        isSearching = true;
+        chosenMovie = null;
+        try
+        {
+            var encodedQuery = Uri.EscapeDataString(searchQuery);
+            var url = $"https://api.themoviedb.org/3/search/movie?api_key=9fb03db06401769da1426077f6d5fd9c&query={encodedQuery}";
+            var response = await Http.GetFromJsonAsync<MovieResponse>(url);
+      
+            searchResults = response?.Results ?? new List<Movie>();
+            chosenMovie = searchResults.FirstOrDefault();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Searching...: {ex.Message}");
+            searchResults = new List<Movie>(); 
+        }
+        finally
+        {
+            isSearching = false;
+        }
+    }
+}

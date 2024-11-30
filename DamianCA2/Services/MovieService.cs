@@ -1,4 +1,11 @@
-﻿namespace DamianCA2.Services
+﻿using DamianCA2.Model;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
+
+namespace DamianCA2.Services
 {
     public class MovieService
     {
