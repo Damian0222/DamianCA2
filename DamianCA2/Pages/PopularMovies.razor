@@ -2,6 +2,19 @@
 @inject HttpClient Http
 <h1>Top 10 Most Popular Movies Of 2025</h1>
 <button @onclick="PopularMovie">Press</button>
+@if (isLoading){
+    <p>Loading...</p>
+}
+else if (movies != null && movies.Any()){
+    <ul>
+        @foreach (var movie in movies)
+        {
+            <li>
+                <strong>@movie.Title</strong>
+            </li>
+        }
+    </ul>
+}
 @code {
     private List<Movie> movies = new();
     private bool isLoading = false;
