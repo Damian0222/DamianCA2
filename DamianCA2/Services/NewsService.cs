@@ -17,4 +17,33 @@ public class NewsService
             throw new Exception("NewsAPI key is missing. Please add it in the NewsService.");
         }
     }
+
+    public async Task<string> FetchMovieNewsAsync()
+    {
+        try
+        {
+            var url = $"https://newsapi.org/v2/everything?q=movies&apiKey={apiKey}";
+
+            Console.WriteLine($"Looking for news articles: {url}");
+
+            var response = await httpClient.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"NewsAPI Error: {response.StatusCode}");
+                var error= await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error details: {error}");
+                return null;
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"NewsAPI response: {json}");
+            return json;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception occurred: {ex.Message}");
+            return null;
+        }
+    }
 }
