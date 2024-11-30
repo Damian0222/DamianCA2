@@ -3,8 +3,7 @@
     public class Movie
     {
         public string Title { get; set; }
-      public int Overview { get; set; }
+        public string Overview { get; set; }  
+        public string ReleaseDate { get; set; }  
     }
 }
-
-
