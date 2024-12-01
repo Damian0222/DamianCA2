@@ -3,24 +3,29 @@
 @inject HttpClient Http
 
 <h1>Movie Search</h1>
-<input @bind="searchQuery" placeholder="Please enter a movie title below" />
+<input @bind="searchQuery" placeholder="Movie title" />
+
 <button @onclick="SearchMovie">Search</button>
 @if (isSearching)
-{
+{// Displays a loading message
     <p>Loading</p>
 }
+// Checks if a movie has been chosen
 else if (chosenMovie != null)
-{
+{// Displays the title of the chosen movie
     <h2>Description of "@chosenMovie.Title"</h2>
     <p>@chosenMovie.Overview</p>
 }
+// Checks if the search query was entered
 else if (!string.IsNullOrWhiteSpace(searchQuery) && searchResults != null && !searchResults.Any())
-{
+{// Error messages that will be displayed
     <p>No movies found, please select a diferent movie.</p>
 }
 @code {
+    // Stores user input
     private string searchQuery;
     private Movie chosenMovie;
+    // Holds the list of movies returned by the search
     private List<Movie> searchResults;
     private bool isSearching;
 
@@ -29,17 +34,19 @@ else if (!string.IsNullOrWhiteSpace(searchQuery) && searchResults != null && !se
         isSearching = true;
         chosenMovie = null;
         try
-        {
+        {// Encodes the query to make it URL safe 
             var encodedQuery = Uri.EscapeDataString(searchQuery);
             var url = $"https://api.themoviedb.org/3/search/movie?api_key=9fb03db06401769da1426077f6d5fd9c&query={encodedQuery}";
             var response = await Http.GetFromJsonAsync<MovieResponse>(url);
       
             searchResults = response?.Results ?? new List<Movie>();
+             //Assigns the first movie from the results to chosenMovie
             chosenMovie = searchResults.FirstOrDefault();
-        }
+    }
         catch (Exception ex)
         {
             Console.Error.WriteLine($"Searching...: {ex.Message}");
+            // Resets the search results to an empty list.
             searchResults = new List<Movie>(); 
         }
         finally
@@ -48,3 +55,6 @@ else if (!string.IsNullOrWhiteSpace(searchQuery) && searchResults != null && !se
         }
     }
 }
+<footer>
+    <p>Thank you for visiting the MovieAtlas page! © 2024</p>
+</footer>

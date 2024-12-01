@@ -24,7 +24,7 @@ public class NewsService
         }
     }
     // Async method to fetch news articles
-    public async Task<string> FetchMovieNewsAsync()
+    public async Task<string> FetchMovie()
     {
         try
         {

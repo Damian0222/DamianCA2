@@ -2,29 +2,27 @@
 @inject NewsService NewsService
 
 <h1>Latest Movie News</h1>
-
 @if (loading)
+//Loading meessage when looking when fetching for articles
 {
     <p>Loading...</p>
-}
-else if (articles != null && articles.Count > 0)
-{
+}// Checks if articles exist 
+else if (articles != null && articles.Count > 0){
     <ul>
         @foreach (var article in articles)
         {
+                    // Displays the article title and source name in bold
             <li>
                 <strong>@article.title</strong> - @article.source.name
                 <br />
                 <a href="@article.url" target="_blank">Read More</a>
-            </li>
-        }
+            </li>}
     </ul>
 }
 else
 {
     <p>No news articles available</p>
 }
-
 @code {
     private List<Article> articles = new();
     private bool loading = false;
@@ -33,16 +31,17 @@ else
     protected override async Task OnInitializedAsync()
     {
         loading = true;
-
-        Console.WriteLine("Fetching news articles...");
-        var result = await NewsService.FetchMovieNewsAsync();
+        // Tracks the fetching action to the console.
+        Console.WriteLine("Fetching articles");
+        var result = await NewsService.FetchMovie();
 
         if (!string.IsNullOrEmpty(result))
-        {
+        {   // Converts the JSON response into a object
             var newsResponse = System.Text.Json.JsonSerializer.Deserialize<NewsResponse>(result);
+            // Extracts articles from the response
             articles = newsResponse?.articles ?? new List<Article>();
         }
-
+        // Sets the loading false after fetching is complete
         loading = false;
     }
 
