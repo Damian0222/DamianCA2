@@ -9,19 +9,18 @@ namespace DamianCA2
     {
         public static async Task Main(string[] args)
         {
-            // Create the builder for the WebAssembly host
+           
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
-            // Configure the HttpClient to be used throughout the application
+           
             builder.Services.AddScoped(sp => new HttpClient
             {
                 BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
 
             });
 
-            // Register the MusicService for dependency injection
             builder.Services.AddScoped<MovieService>();
             builder.Services.AddScoped<NewsService>();
          
@@ -33,5 +32,5 @@ namespace DamianCA2
         }
     }
 
-    // MusicService for handling API requests
+
 }

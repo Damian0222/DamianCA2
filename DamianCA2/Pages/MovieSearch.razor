@@ -3,58 +3,116 @@
 @inject HttpClient Http
 
 <h1>Movie Search</h1>
-<input @bind="searchQuery" placeholder="Movie title" />
+<input @bind="searchQuery" placeholder="Enter movvie title" />
+<button @onclick="SearchMovies">Search</button>
 
-<button @onclick="SearchMovie">Search</button>
-@if (isSearching)
-{// Displays a loading message
-    <p>Loading</p>
-}
-// Checks if a movie has been chosen
-else if (chosenMovie != null)
-{// Displays the title of the chosen movie
-    <h2>Description of "@chosenMovie.Title"</h2>
-    <p>@chosenMovie.Overview</p>
-}
-// Checks if the search query was entered
-else if (!string.IsNullOrWhiteSpace(searchQuery) && searchResults != null && !searchResults.Any())
-{// Error messages that will be displayed
-    <p>No movies found, please select a diferent movie.</p>
-}
-@code {
-    // Stores user input
-    private string searchQuery;
-    private Movie chosenMovie;
-    // Holds the list of movies returned by the search
-    private List<Movie> searchResults;
-    private bool isSearching;
-
-    private async Task SearchMovie()
+<p>@errorMessage</p>
+<!-- Loops through each movie in searchResults-->
+<ul>
+    @foreach (var movie in Results)
     {
-        isSearching = true;
-        chosenMovie = null;
-        try
-        {// Encodes the query to make it URL safe 
-            var encodedQuery = Uri.EscapeDataString(searchQuery);
-            var url = $"https://api.themoviedb.org/3/search/movie?api_key=9fb03db06401769da1426077f6d5fd9c&query={encodedQuery}";
-            var response = await Http.GetFromJsonAsync<MovieResponse>(url);
-      
-            searchResults = response?.Results ?? new List<Movie>();
-             //Assigns the first movie from the results to chosenMovie
-            chosenMovie = searchResults.FirstOrDefault();
+        <li>
+            <strong>@movie.Title</strong>
+            <p>@movie.Overview</p>
+            <!-- Button to add/removefrom the wishlis -->
+            <button @onclick="() => ToggleWishlist(movie)">
+                @(movie.InWishlist ? "Delete from Wishlist" : "Add to Wishlist")
+            </button>
+        </li>
     }
+</ul>
+<h2>Movies to watch</h2>
+<!--Checks for movies in the list -->
+@if (wishlist.Any())
+{
+    <ul>
+        @foreach (var movie in wishlist)
+        {
+            <li>
+                <strong>@movie.Title</strong>
+                <p>@movie.Overview</p>
+                <button @onclick="() => ToggleWishlist(movie)">
+                    Remove
+                </button>
+            </li>
+        }
+    </ul>
+}
+else
+{
+           <!-- Message when wishlist is empty -->
+    <p>Wishlist is empty</p>
+}
+
+@code {
+    <!-- Variable to hold search querys-->
+    private string searchQuery = string.Empty;
+    <!-- Shows if its processing-->
+    private bool isSearching = false;
+    <!-- Invalid message-->
+    private string errorMessage = string.Empty;
+    <!-- Stores search results-->
+    private List<Movie> Results = new();
+    <!-- Variable to hold the user's search query-->
+    private List<Movie> wishlist = new();
+    <!--  API key to get movie data-->
+    private string apiKey = "9fb03db06401769da1426077f6d5fd9c";
+
+    private async Task SearchMovies()
+    {
+        <!-- Sets the search in progress-->
+        isSearching = true;
+        <!--  Clears other error messages-->
+        errorMessage = string.Empty;
+        <!--  Clears other search results-->
+        Results.Clear();
+        
+        try
+        {
+            <!--  Cehcks if seach query is empty-->
+            if (string.IsNullOrWhiteSpace(searchQuery))
+            {
+                errorMessage = "Please enter a valid movie title.";
+                return;
+            }
+
+            <!--  Query for use in the url-->
+            var encodedQuery = Uri.EscapeDataString(searchQuery);
+            var url = $"https://api.themoviedb.org/3/search/movie?api_key={apiKey}&query={encodedQuery}";
+            var response = await Http.GetFromJsonAsync<MovieResponse>(url);
+            <!--  Checks if theres any results-->
+            if (response?.Results == null || !response.Results.Any())
+            {
+                errorMessage = "Invalid movie, please try a different title";
+            }
+            else
+            {
+                Results = response.Results;
+            }
+        }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Searching...: {ex.Message}");
-            // Resets the search results to an empty list.
-            searchResults = new List<Movie>(); 
+            errorMessage = $"Error while searcging: {ex.Message}";
         }
         finally
         {
             isSearching = false;
         }
     }
+    <!--  Changes movies status-->
+    private void ToggleWishlist(Movie movie)
+    {
+        <!--  API key to get movie data-->
+        movie.InWishlist = !movie.InWishlist;
+        <!-- Adds movie-->
+        if (movie.InWishlist)
+        {
+            wishlist.Add(movie);
+        }
+        else
+        {
+            <!--Removes movie-->
+            wishlist.Remove(movie);
+        }
+    }
 }
-<footer>
-    <p>Thank you for visiting the MovieAtlas page! © 2024</p>
-</footer>

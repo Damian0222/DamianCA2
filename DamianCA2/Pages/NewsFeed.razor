@@ -1,4 +1,12 @@
-﻿@page "/news"
+﻿@using System
+@using System.Collections.Generic
+@using System.Linq
+@using System.Threading.Tasks
+@using System.Text.Json
+@using DamianCA2.Model
+
+
+@page "/news"
 @inject NewsService NewsService
 
 <h1>Latest Movie News</h1>
@@ -6,17 +14,19 @@
 //Loading meessage when looking when fetching for articles
 {
     <p>Loading...</p>
-}// Checks if articles exist 
-else if (articles != null && articles.Count > 0){
+}// Checks if articles exist
+else if (articles != null && articles.Count > 0)
+{
     <ul>
         @foreach (var article in articles)
         {
-                    // Displays the article title and source name in bold
+            // Displays the article title and source name in bold
             <li>
                 <strong>@article.title</strong> - @article.source.name
                 <br />
                 <a href="@article.url" target="_blank">Read More</a>
-            </li>}
+            </li>
+        }
     </ul>
 }
 else
