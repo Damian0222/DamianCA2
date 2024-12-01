@@ -1,14 +1,18 @@
-﻿@page "/popular-movies"
+﻿@page "/popular-movies" 
 @inject HttpClient Http
-<h1>Top 10 Most Popular Movies Of 2025</h1>
-<button @onclick="PopularMovie">Press</button>
-@if (isLoading){
+<h1>Top 10 Most Popular Movies Of 2025</h1> 
+<button @onclick="PopularMovie">Press</button>  
+@if (isLoading)
+{ 
     <p>Loading...</p>
 }
+// Checks if movies list is empty or not
 else if (movies != null && movies.Any()){
+    // Goes throught the list of movies
     <ul>
         @foreach (var movie in movies)
         {
+            // Displays the title
             <li>
                 <strong>@movie.Title</strong>
             </li>
@@ -16,20 +20,25 @@ else if (movies != null && movies.Any()){
     </ul>
 }
 @code {
+    // List that holds info
     private List<Movie> movies = new();
     private bool isLoading = false;
+    // Async method to get popular movies
     private async Task PopularMovie()
     {
         isLoading = true;
         try
         {
+            // API for popular movies.
             var url = $"https://api.themoviedb.org/3/movie/popular?api_key=9fb03db06401769da1426077f6d5fd9c";
             var response = await Http.GetFromJsonAsync<MovieResponse>(url);
+            // Takes top 10 movies from the response
             movies = response?.Results.Take(10).ToList();
         }
         catch (Exception ex)
-{
-            Console.Error.WriteLine($"Error: {ex.Message}");
+        {
+            // Console if the request fails
+          Console.Error.WriteLine($"Error: {ex.Message}");
             movies = new List<Movie>();
         }
         finally

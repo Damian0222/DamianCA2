@@ -1,6 +1,6 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: #333; /* Optional: Change the default text color if needed */
+    color: #333;
     height: 100%;
     margin: 0;
     padding: 0;
@@ -21,12 +21,12 @@ footer {
 }
 
 .logo {
-    width: 150px; /* Sets the width of the image to 100 pixels */
-    height: auto; /* Maintains the aspect ratio of the image */
+    width: 150px; 
+    height: auto; 
 
-    position: right; /* Relative to its normal position */
-    top: 2px; /* Moves the image 5 pixels down from its normal position */
-    left: 10px; /* Moves the image 10 pixels to the right from its normal position */
+    position: right;
+    top: 2px; 
+    left: 10px;
 }
 
 input, button {
@@ -48,7 +48,7 @@ li {
 }
 
 .right-images {
-    flex: 0 0 50px; /* Adjust width based on your image size or preference */
+    flex: 0 0 50px; 
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -57,6 +57,6 @@ li {
 }
 
     .right-images img {
-        width: 10%; /* Make images expand to fill the sidebar */
+        width: 10%; 
         margin-bottom: 10px;
     }
